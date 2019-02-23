@@ -82,6 +82,7 @@ Name: Gender, dtype: int64
 
 # So we're cool with the data now, let's see what the data looks like.
 Let's see what the distribution of the Age looks like.
+``` html
 >>> from matplotlib import pyplot as plt
 >>> ages = data['Age'].values
 >>> plt.hist(ages, bins=7, histtype='step', align='mid')
@@ -89,7 +90,7 @@ Let's see what the distribution of the Age looks like.
 >>> plt.ylabel('Number of Peeps')
 >>> plt.title('Distribution of Ages')
 >>> plt.show()
-
+```
 
 We can see that there a lotta people ages of 30 - 40.
 
@@ -127,10 +128,16 @@ the data should now have only numeric values with the first 3 columns dropped. W
 X = data[:, :-1] ## all columns with the exception of the last one
 y = data[:, -1] ## the last column (target)
 
+
 Let's try splitting the data and Importing LogisticRegression from sklearn
 import sklearn.model_selection import train_test_split
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, stratify=y, random_state=123)
 
+- Many learning algorithms require features of the same scale for optimal performance. So we have to standardize our data
+from sklearn.preprocessing import StandardScaler
+sc = StandardScaler()
+X_train_std = sc.fit_transform(X_train)
+X_test_std = sc.transform(X_test)
 
 - We can now train our model
 import sklearn.linear_model import LogisticRegression
@@ -144,7 +151,21 @@ print(probas)
 
 - We'll start with k-fold cross validation with k=10. I hear it's the best k to choose :)
 
-kfold = StratifiedKFold(n_splits=10, random_state=1) # indices for splits
+kfold = StratifiedKFold(n_splits=10, random_state=1).split(X_train_std, y_train) # indices for splits
+
+- Now we have the indices for the training and test(validation) data
+for k, (train, test) in enumerate(kfold):
+    lr = lr.fit(X_train[train], y_train[train])
+    score = lr.score(X_train[test], y_train[test])
+
+
+so we can look at the average cross validation score to assess our model.
+
+
+Let's further evaluate our model with different criteria
+# LEARNING AND VALIDATION CURVES
+
+
 
 
 

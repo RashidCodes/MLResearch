@@ -53,6 +53,7 @@ print('Test Accuracy: %.3f' % lr.score(X_test_std, y_test)) ## 80.1% -- not bad,
 
 ## MODEL EVALUATION
 ## We'll start by using K-fold Cross Validation
+## Note that we're still using the training data, we'll use the test != validation data to check our generalization performance.
 from sklearn.model_selection import StratifiedKFold 
 kfold = StratifiedKFold(n_splits=10, random_state=1).split(X_train_std, y_train) ## we now have our indices for the splits
 
