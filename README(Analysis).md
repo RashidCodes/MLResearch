@@ -2,10 +2,12 @@
 I run some of this code in the terminal so you may not find my script complete
 
 
-LIST OF FEATURES
+## LIST OF FEATURES
+```html
 >>> import pandas as pd
 >>> data = pd.read_csv('Churn_Modelling.csv')
 >>> data.columns
+```
 
 - RowNumber 
 - CustomerId
@@ -23,7 +25,7 @@ LIST OF FEATURES
 - Exited
 
 
-# IMPORTANT FEATURES FROM MY PERSPECTIVE
+## IMPORTANT FEATURES FROM MY PERSPECTIVE
 - CreditScore
 - Geography
 - Gender
@@ -36,26 +38,33 @@ LIST OF FEATURES
 - EstimateSalary
 
 So let's drop a few features (vertical)
+```html
 >>> data.drop(['RowNumber', 'CustomerId', 'Surname'], axis=1)
+```
 
-# TARGET
+## TARGET
 - Exited
 
 
-# MISSING VALUES
+## MISSING VALUES
+```html
 >>> data.isnull().sum()
+```
 As we can see, there are no missing values. Awesome!!
 
 
-# HANDLING CATEGORICAL DATA
+## HANDLING CATEGORICAL DATA
 As we can see, we have some categorical data(nominal) under a few features, typically the Gender and Geography fields. Let's do something about it.
 
 Firstly, let's grab all the unique values in the Geography.
+```html
 >>> import numpy as np
 >>> unique_geography = np.unique(data['Geography'].values)
+```
 
 Next, let's assign each string a label
 
+```html
 >>> geography_dict = {val : idx for idx, val in enumerate(unique_geography)}
 >>> geography_dict
 {'France' : 0, 'Germany' : 1, 'Spain' : 2}
@@ -68,9 +77,11 @@ Next, let's assign each string a label
 3 0
 4 2
 Name: Gender, dtype: int64
+```
 
 Let's do the same thing for the gender feature 
 
+```html
 >>> gender_dict = {val:idx for idx, val in enumerate(np.unique(data['Gender'].values))}
 >>> data['Gender'] = data['Gender'].map(gender_dict)
 9995 1
@@ -79,6 +90,7 @@ Let's do the same thing for the gender feature
 9998 1
 9999 0
 Name: Gender, dtype: int64
+```
 
 # So we're cool with the data now, let's see what the data looks like.
 Let's see what the distribution of the Age looks like.
@@ -95,10 +107,12 @@ Let's see what the distribution of the Age looks like.
 We can see that there a lotta people ages of 30 - 40.
 
 hmm, just a thought, I wanna know the number of people above 40 that have credit cards.
+``` html
 >>> peopleAbove40 = hasCrCard[ages > 40] # grab all the data of the people above 40
 >>> # let's now grab all the peeps with credit cards
 ...
 >>> peopleAbove40 = len(peopleAbove40[peopleAbove40 == 1])
+```
 
 There, all done.
 
