@@ -172,7 +172,7 @@ Let's make a few predictions
 >>> probas = lr.predict_proba(X_test[:5, :])
 >>> print(probas)
 ```
-We have something interesting going on. Maybe, just maybe, there's a large imbalance of our targets, we'll explore this later as well. Let's Evaluate our Model using different techniques for now.
+We have something interesting going on. Maybe, just maybe, there's a large imbalance in the distribution of our targets, we'll explore this later as well. Let's Evaluate our Model using different techniques for now.
 
 We'll start with ***k-fold cross validation with k=10***. I hear it's the best k to choose :)
 
