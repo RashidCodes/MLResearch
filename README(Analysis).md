@@ -149,8 +149,8 @@ the data should now have only numeric values with the first 3 columns dropped. W
 
 Let's try splitting the data and Importing LogisticRegression from sklearn
 ```html
-import sklearn.model_selection import train_test_split
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, stratify=y, random_state=123)
+>>> import sklearn.model_selection import train_test_split
+>>> X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, stratify=y, random_state=123)
 ```
 
 Many learning algorithms require input features on the same scale for optimal performance. So we have to standardize our data
