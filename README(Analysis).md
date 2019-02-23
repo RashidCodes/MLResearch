@@ -1,4 +1,6 @@
 # DATA ANALYSIS
+I run some of this code in the terminal so you may not find my script complete
+
 
 LIST OF FEATURES
 >>> import pandas as pd
@@ -54,8 +56,8 @@ Firstly, let's grab all the unique values in the Geography.
 
 Next, let's assign each string a label
 
->>> dict = {val : idx for idx, val in enumerate(unique_geography)}
->>> dict
+>>> geography_dict = {val : idx for idx, val in enumerate(unique_geography)}
+>>> geography_dict
 {'France' : 0, 'Germany' : 1, 'Spain' : 2}
 
 >>> data['Geography'] = data['Geography'].map(dict)
@@ -114,7 +116,35 @@ Well, turns out there is, looks like the average salary of an age group reduces 
 Now let's get to the real deal which iiiisss....
 # MACHINE LEARNING !!!!!
 
-As I am still an amateur, I want to disect these binary classifiers. We start with LOGISTIC REGRESSION
+As I am still an amateur, I want to disect these binary classifiers. We start with simple LOGISTIC REGRESSION, nothing complicated here.
 
+# LOGISTIC REGRESSION
+
+Our focus for now, is going to be on just logistic Regression. We won't compress our data using any dimensionality reduction techniques for now, we'll just use the data as is, and we'll try to evaluate the model we come up with.
+
+the data should now have only numeric values with the first 3 columns dropped. We'll add them later to see how our model changes.
+
+X = data[:, :-1] ## all columns with the exception of the last one
+y = data[:, -1] ## the last column (target)
+
+Let's try splitting the data and Importing LogisticRegression from sklearn
 import sklearn.model_selection import train_test_split
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, stratify=y, random_state=123)
+
+
+- We can now train our model
 import sklearn.linear_model import LogisticRegression
+lr = LogisticRegression(random_state=123, solver='lbfgs', C=100, n_jobs=1).fit(X_train, y_train)
+
+- Let's make a few predictions
+probas = lr.predict_proba(X_test[:5, :])
+print(probas)
+
+- We have something interesting going on. Let's Evaluate our Model using different techniques.
+
+- We'll start with k-fold cross validation with k=10. I hear it's the best k to choose :)
+
+kfold = StratifiedKFold(n_splits=10, random_state=1) # indices for splits
+
+
+
