@@ -339,7 +339,7 @@ Before we write the code, let's explain to ourselves what's supposed to happen.
 **Things we need to know.**
 - The area under the roc curve(ROC AUC) for a perfect model is 1.00.
 
-And now, we are going to plot fpr and tpr for each fold(k=3). And after this, we want to grab the area under our mean_fpr and mean_tpr. This is what is of main importance.
+And now, we are going to plot ***fpr*** and ***tpr** for each fold(k=3). And after this, we want to grab the area under our mean_fpr and mean_tpr. This is what is of main importance.
 
 ```html
 >>> from sklearn.metrics import roc_curve, auc
