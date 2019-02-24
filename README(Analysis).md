@@ -213,7 +213,7 @@ So we have the average cross validation score to assess our model. In this conte
 Let's further evaluate our model with different criteria
 # DEBUGGING WITH LEARNING AND VALIDATION CURVES
 ### LEARNING CURVE
-We all know the 2 of the biggest problems that Machine learning algorithms face; **overfitting** and **underfitting**. So let's see how our model is doing in this regard.
+We all know the 2 biggest problems that Machine learning algorithms face; **overfitting** and **underfitting**. So let's see how our model is doing in this regard.
 
 By plotting the model training and validation accuracies as functions of the training set size, we can easily detect whether our model suffers from high variance (overfitting) or high bias(underfitting). 
 
