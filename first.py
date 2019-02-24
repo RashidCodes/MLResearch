@@ -118,3 +118,69 @@ plt.xlabel('Parameter C')
 plt.ylabel('Accuracy')
 plt.legend(loc='lower right')
 plt.show()
+
+## We still have more metrics to explore. Let's check out the famous confusion matrix
+from sklearn.metrics import confusion_matrix 
+y_predicted = lr.predict(X_test_std)
+confmat = confusion_matrix(y_true = y_test, y_pred = y_predicted)
+
+## and we have our confusion matrix, let's make it look a little bit prettier
+fig, ax = plt.subplots(figsize=(2.5, 2.5))
+ax.matshow(confmat, cmap=plt.cm.Greens, alpha=0.3)
+for i in range(confmat.shape[0]):
+    for j in range(confmat.shape[1]):
+        ax.text(x=j, y=i, s=confmat[i, j], va='center', ha='center')
+plt.xlabel('predicted label')
+plt.ylabel('true label')
+plt.show()
+
+## Let's grab more evidence that our model absolutely sucks using the precision_score and recall_score methods from sklearn.metrics module.
+from sklearn.metrics import precision_score
+from sklearn.metrics import recall_score, f1_score
+print('Precision Score: %.3f' % precision_score(y_true=y_test, y_pred=y_predicted))
+print('Recall: %.3f' % recall_score(y_true=y_test, y_pred=y_predicted))
+print('F1: %.3f' % f1_score(y_true=y_test, y_pred=y_predicted))
+
+
+## RECEIVER OPERATING CHARACTERISTICS
+from sklearn.metrics import roc_curve, auc
+from scipy import interp
+
+## let's create a list of our cross_validation splits
+cv = list(StratifiedKFold(n_splits=3, random_state=1).split(X_train_std, y_train))
+
+## let's create a new figure for our curve
+fig = plt.figure(figsize=(7, 5))
+
+mean_tpr = 0.0
+mean_fpr = np.linspace(0, 1, 100)
+
+## plot the ROC curves for each fold
+for i, (train, test) in enumerate(cv):
+    probas = lr.fit(X_train_std[train], y_train[train]).predict_proba(X_train_std[test])
+    fpr, tpr, thresholds = roc_curve(y_train[test], probas[:, 1], pos_label=1)
+    mean_tpr += interp(mean_fpr, fpr, tpr)
+    mean_tpr[0] = 0.0
+    roc_auc = auc(fpr, tpr)
+    plt.plot(fpr, tpr, label='ROC fold %d (area = %0.2f)' % (i+1, roc_auc))
+
+
+## Let's plot the curve for random guessing
+plt.plot([0, 1], [0, 1], linestyle='--', color=(0.5, 0.5, 0.5), label='random guessing')
+
+
+## grabbing the mean_tpr over k=3 splits
+mean_tpr = mean_tpr / len(cv)
+mean_tpr[-1] = 1.0
+mean_auc = auc(mean_fpr, mean_tpr)
+plt.plot(mean_fpr, mean_tpr, color='black', linestyle='--', label='mean ROC (area = %0.2f' % mean_auc, linewidth=2)
+
+## let's plot the curve for perfect performance
+plt.plot([0, 0, 1], [0, 1, 1], 'k:', label='perfect performance')
+
+# Some Annotation
+plt.xlabel('False Positive Rate')
+plt.ylabel('True Positive Rate')
+plt.legend(loc='lower right')
+plt.show()
+

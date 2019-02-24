@@ -298,3 +298,97 @@ Okaayy, thank you Mr. Validation Curve. He gave us a few insights
 
 So I decided to vary C and observe the performance of our model. Nothing much happened :(. Perhaps we can apply a few **dimensionality reduction techniques** to produce higher accuracies, we'll see.
 
+## ANOTHER EVALUATION METHOD OFTEN USED IS THE CONFUSION MATRIX
+### Let's see what it has to say about our data.
+Firstly, let us predict some targets with our test set
+
+```html
+>>> from sklearn.metrics import confusion_matrix
+>>> 
+>>> y_predicted = lr.predict(X_test_std)
+>>> confusion_matrix = confusion_matrix(y_true=y_test, y_pred=y_predicted)
+```
+
+Confusion matrix is all done, let's make it look a little prettier
+```html
+fig, ax = plt.subplots(figsize=(2.5, 2.5))
+ax.matshow(confmat, cmap=plt.cm.Greens, alpha=0.3)
+for i in range(confmat.shape[0]):
+    for j in range(confmat.shape[1]):
+        ax.text(x=j, y=i, s=confmat[i, j], va='center', ha='center')
+plt.xlabel('predicted label')
+plt.ylabel('true label')
+plt.show()
+```
+
+There, all done. Damn, our model really sucks haha. Let's grab more evidence.
+```html
+>>> from sklearn.metrics import precision_score
+>>> from sklearn.metrics import recall_score, f1_score
+>>> print('Precision Score: %.3f' % precision_score(y_true=y_test, y_pred=y_predicted))
+
+>>> print('Recall: %.3f' % recall_score(y_true=y_test, y_pred=y_predicted))
+
+>>> print('F1: %.3f' % f1_score(y_true=y_test, y_pred=y_predicted))
+```
+
+Great, before we deal with **class imbalance**, let's plot the ROC curve for our model. They tell us how our model is doing with respect to TPR and FPR. A perfect classifier of course has a TPR = 1 and FPR = 0.
+
+Before we write the code, let's explain to ourselves what's supposed to happen.
+
+- Things we need to know.
+The area under the roc curve(ROC AUC) for a perfect model is 1.00.
+
+And now, we are going to plot fpr and tpr for each fold(k=3). And after this, we want to grab the area under our mean_fpr and mean_tpr. This is what is of main importance.
+
+```html
+>>> from sklearn.metrics import roc_curve, auc
+>>> from scipy import interp
+
+>>> cv = list(StratifiedKFold(n_splits=3, random_state=1).split(X_train_std, y_train)) ## k=3
+
+>>> fig = plt.figure(figsize=(7, 5))
+
+>>> mean_tpr = 0.0
+>>> mean_fpr = np.linspace(0, 1, 100)
+>>> all_tpr = []
+
+## If ever you forget, just type help(roc_curve)
+>>> for i, (train, test) in enumerate(cv):
+...     probas = lr.fit(X_train_std[train], y_train[train]).predict_proba(X_train_std[test])
+...     fpr, tpr, thresholds = roc_curve(y_train[test], probas[:, 1], pos_label=1)
+
+>>> mean_tpr += interp(mean_fpr, fpr, tpr)
+>>> mean_tpr[0] = 0.0 # always set our first value to 0
+
+## we calculate the area for each split using auc
+>>> roc_auc = auc(fpr, tpr)
+>>> plt.plot(fpr, tpr, label='ROC Fold %d (area=%0.2f)' % (i+1, roc_auc))
+
+## Now let's plot the curve for random guessing
+>>> plt.plot([0, 1], [0, 1], linestyle='--', color=(0.5, 0.5, 0.5), label='random guessing')
+
+## Next, our mean_fpr-mean_tpr curve --->  very important
+>>> mean_tpr = mean_tpr / len(cv)
+
+## We want the last value to have a value of 1.
+>>> mean_tpr[-1] = 1.0
+
+mean_auc = auc(mean_fpr, mean_tpr)
+>>> plt.plot(mean_fpr, mean_tpr, color='black', linestyle=':', label='mean ROC (area = %0.2f)' % mean_auc, linewidth=2)
+
+## Lastly we wanna plot the curve for a perfect model
+>>> plt.plot([0, 0, 1], [0, 1, 1], linestyle='--', color='black', label='pefecto performance)
+
+## Little editting
+>>> plt.xlabel('False Positive Rate')
+>>> plt.ylabel('True Positive Rate')
+>>> plt.legend(loc='lower right')
+>>> plt.show()
+```
+
+All done. Our ROC curve doesn't look bad at all, hopefully we'll be able to make our mean hit the corner someday. :)
+
+
+
+
