@@ -206,13 +206,95 @@ Fold 10, Class Distribution.: [5017 1284], Acc 0.797
 CV Accuracy: 0.809 +/- 0.010
 ```
 
-so we have the average cross validation score to assess our model. In this context, 80% accuracy doesn't seem too bad, but of course, we have to increase this number somehow!!.
+### Deductions
+So we have the average cross validation score to assess our model. In this context, 80% accuracy doesn't seem too bad, but of course, we have to increase this number somehow!!.
 
 
 Let's further evaluate our model with different criteria
-# LEARNING AND VALIDATION CURVES
+# DEBUGGING WITH LEARNING AND VALIDATION CURVES
+### LEARNING CURVE
+We all know the 2 of the biggest problems that Machine learning algorithms face; **overfitting** and **underfitting**. So let's see how our model is doing in this regard.
+
+By plotting the model training and validation accuracies as functions of the training set size, we can easily detect whether our model suffers from high variance (overfitting) or high bias(underfitting). 
+
+So without further ado, let's jump right into it.
+
+We're going to use sklearn's learning_curve method. Before so though, usually I'll read a little bit about the function using the inbuilt help() function in python just to have an idea about other **kwargs.
+
+```html
+>>> import matplotlib as plt
+>>> from sklearn.model_selection import learning_curve
+
+>>> train_sizes, train_scores, test_scores = learning_curve(estimator=lr, X=X_train_std, y=y_train, train_sizes=np.linspace(0.1, 1.0, 10), cv=10, n_jobs=1)
+
+>>> train_mean = np.mean(train_scores, axis=1)
+>>> train_std = np.std(train_scores, axis=1)
+>>> test_mean = np.mean(test_scores, axis=1)
+>>> test_std = np.std(test_scores, axis=1)
+
+>>> plt.plot(train_sizes, train_mean, color='magenta', marker='o', markersize=5, label='training accuracy')
+
+>>> plt.fill_between(train_sizes, train_mean + train_std, train_mean - train_std, alpha=0.15, color='magenta')
+
+>>> plt.plot(train_sizes, test_mean, color='green', linestyle='--', marker='s', markersize=5, label='validation accuracy')
+
+>>> plt.fill_between(train_sizes, test_mean + test_std, test_mean - test_std, color='green', alpha=0.15)
+
+>>> plt.grid(True)
+>>> plt.xlabel('Number of training samples')
+>>> plt.ylabel('Accuracy')
+>>> plt.legend(loc='lower right')
+>>> plt.ylim([0.7, 1.0])
+>>> plt.show()
+
+```
+
+The ***train_sizes*** parameter tells us the number of training samples that are used to generate the learning_curves.
 
 
+### Deductions
+Phew!, our model underfits the data, too bad. In the event where our model underfits some data, we can explore any of these options:
+- Reduce the strength of regularization.
+- We can also add more training samples.
 
+But looking at the curve, adding more training samples will probably not do us any good, we have to explore greater options.
 
+Later in our project, we'll explore these options. For now, C=100, perhaps we should consider increasing C later. Moving on....let's play with validation curves as well.
+
+### VALIDATION CURVE
+Validation curves are also used to improve the performance of a model by addressing overfitting or underfitting. They are quite similar to learning_curves with the only difference being that the model parameters are varied, like C in logisticRegression.
+
+```html
+>>> import matplotlib as plt
+>>> from sklearn.model_selection import validation_curve
+
+>>> param_range = [0.001, 0.01, 0.1, 1.0, 10.0, 100.0]
+>>> train_scores, test_scores = validation_curve(estimator=lr, X=X_train_std, y=y_train, param_name='logisticregression__C', param_range=param_range, cv=10)
+
+>>> train_mean = np.mean(train_scores, axis=1)
+>>> train_std = np.std(train_scores, axis=1)
+>>> test_mean = np.mean(test_scores, axis=1)
+>>> test_std = np.std(test_scores, axis=1)
+
+>>> plt.plot(param_range, train_mean, color='magenta', marker='o', markersize=5, label='training accuracy')
+
+>>> plt.fill_between(param_range, train_mean + train_std, train_mean - train_std, alpha=0.15, color='magenta')
+
+>>> plt.plot(param_range, test_mean, color='green', linestyle='--', marker='s', markersize=5, label='validation accuracy')
+
+>>> plt.fill_between(param_range, test_mean + test_std, test_mean - test_std, color='green', alpha=0.15)
+
+>>> plt.grid(True)
+>>> plt.xscale('log')
+>>> plt.xlabel('Parameter C')
+>>> plt.ylabel('Accuracy')
+>>> plt.legend(loc='lower right')
+>>> plt.show()
+
+```
+Okaayy, thank you Mr. Validation Curve. He gave us a few insights
+- Our validation accuracy is higher than our training accuracy after C=2.92
+- Our model still underfits the data because the Accuracy is nowhere near 1.
+
+So I decided to vary C and observe the performance of our model. Nothing much happened :(. Perhaps we can apply a few **dimensionality reduction techniques** to produce higher accuracies, we'll see.
 
