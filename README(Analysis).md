@@ -298,8 +298,8 @@ Okaayy, thank you Mr. Validation Curve. He gave us a few insights
 
 So I decided to vary C and observe the performance of our model. Nothing much happened :(. Perhaps we can apply a few **dimensionality reduction techniques** to produce higher accuracies, we'll see.
 
-## ANOTHER EVALUATION METHOD OFTEN USED IS THE CONFUSION MATRIX
-### Let's see what it has to say about our data.
+## THE CONFUSION MATRIX
+### Another evaluation method often used is the Confusion Matrix, let's see what it has to say about our data.
 Firstly, let us predict some targets with our test set
 
 ```html
