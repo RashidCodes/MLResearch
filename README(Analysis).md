@@ -353,7 +353,7 @@ And now, we are going to plot ***fpr*** and ***tpr*** for each fold(k=3). And af
 >>> mean_fpr = np.linspace(0, 1, 100)
 >>> all_tpr = []
 
-## If ever you forget, just run <strong>help(roc_curve)</strong>
+## If ever you forget, just run help(roc_curve)
 >>> for i, (train, test) in enumerate(cv):
 ...     probas = lr.fit(X_train_std[train], y_train[train]).predict_proba(X_train_std[test])
 ...     fpr, tpr, thresholds = roc_curve(y_train[test], probas[:, 1], pos_label=1)
