@@ -120,7 +120,7 @@ I also wanna know if there's some kinda relationship between a customer's age an
 ```html
 >>> ages = data['Age'].values
 >>> estimated_salary = data['EstimatedSalary'].values
->>> plt.scatter(ages, estimated salary)
+>>> plt.scatter(ages, estimated_salary)
 >>> plt.xlabel('Ages')
 >>> plt.ylabel('Estimated Salary')
 >>> plt.title('Estimated Salaries with Age')
