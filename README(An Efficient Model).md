@@ -32,7 +32,7 @@ Previously, we did not consider some of the assumptions aforementioned. So we'll
 
 - The **dependent** variable is dichotomous in nature so that's good.
 
-- In the preparation of data for our last model, we did not check for **Outliers** in our data. In a post from statisticssolutions.com, this problem can be handled by removing values below -3.29 or 3.29. We will try this method and see how the model does.
+- In the preparation of data for our last model, we did not check for **Outliers** in our data. In a post from ***statisticssolutions.com***, this problem can be handled by removing values below -3.29 or above 3.29. We will try this method and see how the model does.
 
 - We also did not check for **multicollinearity** in our data. For any pair of highly correlated features, we'll drop one, and we'll assess how model performance for our final dataset.
 
