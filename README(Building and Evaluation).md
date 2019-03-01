@@ -4,7 +4,7 @@ Predicting customer churn (Research)
 Now let's get to the real deal which iiiisss....
 # MACHINE LEARNING !!!!!
 
-As I am still an amateur, I want to disect these binary classifiers. We start with simple LOGISTIC REGRESSION, nothing complicated here.
+As I am still an amateur, I want to disect these binary classifiers. We start with multivariate LOGISTIC REGRESSION , nothing complicated here.
 
 ## LOGISTIC REGRESSION
 
@@ -86,7 +86,7 @@ Let's further evaluate our model with different criteria
 ### LEARNING CURVE
 We all know the 2 biggest problems that Machine learning algorithms face; **overfitting** and **underfitting**. So let's see how our model is doing in this regard.
 
-By plotting the model training and validation accuracies as functions of the training set size, we can easily detect whether our model suffers from high variance (overfitting) or high bias(underfitting). 
+By plotting the model training and validation accuracies as functions of the training set size, we can easily detect whether our model suffers from **high variance (overfitting)** or **high bias(underfitting)**. 
 
 So without further ado, let's jump right into it.
 
