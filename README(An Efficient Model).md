@@ -1,4 +1,4 @@
-In our last post, we built a Logistic Regression Model with our data. Our model didn't do too well but as an amateur ML engineers, we want that to happen so we'll have to make a few changes. Afterall, what did Einstein say :).
+In our last post, we built a Logistic Regression Model with our data. Our model didn't do well on our data but as amateur ML engineers, we want that to happen so we'll have to make a few changes. Afterall, what did Einstein say :).
 
 Firstly, let's review some of the things that we did wrongly and some stuff that could have also been done.
 
