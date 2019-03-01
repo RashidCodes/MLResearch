@@ -38,7 +38,8 @@ Previously, we did not consider some of the assumptions aforementioned. So we'll
 
 - We will also grab two features for visualization purposes - checking for **linear seperability** between these features.
 
-A model will be trained with the final dataset that follows all of the assumptions listed above.
+## CLASS IMBALANCE
+From our previous research, we noticed that there is a large imbalance in our classes. We will try a selected number of methods on our dataset and evaluate our model's performance accordingly.
 
 
 
