@@ -21,7 +21,8 @@ data['Geography'] = data['Geography'].map(geography_dict)
 gender_dict = {val : idx for idx, val in enumerate(np.unique(data['Gender'].values))}
 data['Gender'] = data['Gender'].map(gender_dict)
 
-## THE EXCITING MACHINE LEARNING PART
+## Let's now save this data for later.
+data.to_csv('Churn_Modelling1.csv', columns=data.columns)
 
 ## let's grab our DataFrame and make it a numpy.array() object
 data = np.array(data)

@@ -41,7 +41,94 @@ Previously, we did not consider some of the assumptions aforementioned. So we'll
 ## CLASS IMBALANCE
 From our previous research, we noticed that there is a large imbalance in our classes. We will try a selected number of methods on our dataset and evaluate our model's performance accordingly.
 
+The first assumption we're going to tackle is ***linear seperability***. We'll take take 2 features - Age, Tenure (no specific criteria) and plot these observations. 
 
+```html
+>>> import pandas as pd 
+>>> import numpy as np 
+>>> from matplotlib import pyplot as plt
+
+## we'll first grab our data
+>>> try:
+...    data = pd.read_csv('Churn_Modelling1.csv')
+... except:
+...   print('The data was not found')
+
+## grabbing 2 features
+>>> X = data[['Age', 'Tenure']]
+>>> X = np.array(X)
+
+# targets
+>>> y = data['Exited']
+
+## all samples where Exited == 0
+>>> X_0 = X[y == 0, :]
+
+## all samples where Exited == 1
+>>> X_1 = X[y == 1, :]
+
+## We can now plot the data (50 samples)
+>>> plt.scatter(X_0[:50, 0], X_0[:50, 1], color='blue', marker='x', label='Samples with class 0')
+>>> plt.scatter(X_1[:50, 0], X_1[:50, 1], color='red', marker='o', label='Samples with class 1')
+>>> plt.xlabel('Age')
+>>> plt.ylabel('Tenure')
+>>> plt.legend(loc='upper left')
+>>> plt.show()
+```
+
+Our plot shows that the 2 features are not ***linearly seperable***. 
+
+Next let's explore the assumption that there is no linear relationship between any of the features and the dependent variable. We'll randomly select any feature and plot it against the target.
+
+```html
+>>> try:
+...    data = pd.read_csv('Churn_Modelling.csv')
+... except:
+...    print('The data was not found')
+
+>>> X = data['CreditScore']
+>>> y = data['Exited']
+
+>>> plt.scatter(np.array(X)[:50], y[:50], color='green', marker='o', label='CreditScore vs Target')
+>>> plt.xlabel('CreditScore')
+>>> plt.ylabel('Exited')
+>>> plt.legend(loc='center right')
+>>> plt.show()
+```
+
+Let's investigate ***collinearity*** between features. We'll plot the correlation matrix to summarise the linear relationship between the features.
+
+```html
+>>> data = data.drop(['Exited'], axis=1)
+>>> data.columns = ['CreditScore', 'Geography', 'Gender', 'Age', 'Tenure', 'Balance', 'NumOfProducts', 'HasCrCard'             ...                    'IsActiveMember', 'EstimatedSalary']
+>>> cols = data.columns
+>>> cm = np.corrcoef(data[cols].values.T)
+>>> sns.set(font_scale=1.5)
+>>> hm = sns.heatmap(cm, cbar=True, annot=True, square=True, fmt='.2f', annot_kws={'size' : 15}, yticklabels=cols,             ...      xticklabels=cols)
+>>> plt.show()
+```
+The strength of the correlation between features is generally weak. Later, we'll use decision trees to assess feature importance.
+
+We have to deal with outliers now, there are different ways of dealing with outliers, however we'll use the Tukey IQR.
+
+We'll use this simple function to remove the outliers in our data. (Credit to **vishalkuo** on github)
+
+```html
+def removeOutliers(x, outlierConstant):
+    a = np.array(x)
+    upper_quartile = np.percentile(a, 75)
+    lower_quartile = np.percentile(a, 25)
+    IQR = (upper_quartile - lower_quartile) * outlierConstant
+    quartileSet = (lower_quartile - IQR, upper_quartile + IQR)
+    
+    result = a[(a > quartileSet[0]) & (a < quartileSet[1])]
+    
+    return result.tolist()
+```
+
+## DEALING WITH CLASS IMBALANCE
+Let's check the distribution of the classes in our dataset.
+```html
 
 
 
